@@ -1,0 +1,325 @@
+{
+    "nodos": {
+        "gerente-general": {
+            "nombre": "Gerente General",
+            "empleado": "",
+            "color": "yellow",
+            "hijos": ["growth-team","licitaciones","adm-finanzas","gerente-tecnico","subgerente"],
+            "expanded": false,
+            "rendered": false
+        },
+        "growth-team": {
+            "nombre": "Growth Team",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "licitaciones": {
+            "nombre": "Licitaciones",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "adm-finanzas": {
+            "nombre": "Administración y Finanzas",
+            "empleado": "",
+            "color": "blue",
+            "hijos": ["rrhh","adquisiciones","contabilidad","control-costos","tesoreria"],
+            "expanded": false,
+            "rendered": false
+        },
+        "rrhh": {
+            "nombre": "Recursos Humanos",
+            "empleado": "",
+            "color": "blue",
+            "hijos": ["asistenterrhh"],
+            "expanded": false,
+            "rendered": false
+        },
+        "asistenterrhh": {
+            "nombre": "Asistente de Recursos Humanos",
+            "empleado": "",
+            "color": "blue",
+            "hijos": ["asistente-adm"],
+            "expanded": false,
+            "rendered": false
+        },
+        "asistente-adm": {
+            "nombre": "Asistente Administrativo",
+            "empleado": "",
+            "color": "red",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "adquisiciones": {
+            "nombre": "Adquisiciones",
+            "empleado": "",
+            "color": "blue",
+            "hijos": ["asistente-compra"],
+            "expanded": false,
+            "rendered": false
+        },
+        "asistente-compra": {
+            "nombre": "Asistente de compra",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "contabilidad": {
+            "nombre": "Contabilidad",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "control-costos": {
+            "nombre": "Control de costos",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "tesoreria": {
+            "nombre": "Tesorería",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "gerente-tecnico": {
+            "nombre": "Gerente Técnico",
+            "empleado": "",
+            "color": "yellow",
+            "hijos": ["operaciones","subgerente"],
+            "expanded": false,
+            "rendered": false
+        },
+        "operaciones": {
+            "nombre": "Operaciones",
+            "empleado": "",
+            "color": "blue",
+            "hijos": ["produccion","claim","maquinaria","it","subgerente-contratos","control-gestion"],
+            "expanded": false,
+            "rendered": false
+        },
+        "produccion": {
+            "nombre": "Producción",
+            "empleado": "",
+            "color": "blue",
+            "hijos": ["obras-civiles","senalizacion-sistemas","via-ferrea","electrificacion"],
+            "expanded": false,
+            "rendered": false
+        },
+        "obras-civiles": {
+            "nombre": "Obras Civiles",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "senalizacion-sistemas": {
+            "nombre": "Señalización y Sistemas",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "via-ferrea": {
+            "nombre": "Vía Férrea",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "electrificacion": {
+            "nombre": "Electrificación",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "claim": {
+            "nombre": "Claim",
+            "empleado": "",
+            "color":"blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "maquinaria": {
+            "nombre": "Maquinaria",
+            "empleado": "",
+            "color": "blue",
+            "hijos": ["staff","mecanico-mayor","soldador","operador-maquinaria","tecnico-mecanico"],
+            "expanded": false,
+            "rendered": false
+        },
+        "staff": {
+            "nombre": "STAFF",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "mecanico-mayor": {
+            "nombre": "Mecánico Mayor",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "soldador": {
+            "nombre": "Soldador",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "operador-maquinaria": {
+            "nombre": "Operador Maquinaria",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "tecnico-mecanico": {
+            "nombre": "Técnico Mecánico",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "it": {
+            "nombre": "IT",
+            "empleado": "",
+            "color": "blue",
+            "hijos": ["desarrollo"],
+            "expanded": false,
+            "rendered": false
+        },
+        "desarrollo": {
+            "nombre": "Desarrollo",
+            "empleado": "",
+            "color": "red",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "subgerente-contratos": {
+            "nombre": "Subgerente de Contratos",
+            "empleado": "",
+            "color": "blue",
+            "hijos":["adm-contratos"],
+            "expanded": false,
+            "rendered": false
+        },
+        "adm-contratos": {
+            "nombre": "Administrador de Contratos",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "control-gestion": {
+            "nombre": "Control de Gestión",
+            "empleado": "",
+            "color": "red",
+            "hijos": ["of-tecnica","programacion"],
+            "expanded": false,
+            "rendered": false
+        },
+        "of-tecnica": {
+            "nombre": "Oficina Técnica",
+            "empleado": "",
+            "color": "red",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "programacion": {
+            "nombre": "Programación",
+            "empleado": "",
+            "color": "red",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "subgerente": {
+            "nombre": "Lider Trinorma / Subgerente",
+            "empleado": "",
+            "color": "red",
+            "hijos": ["jefe-calidad","jefe-medioambiente","jefe-prevencion"],
+            "expanded": false,
+            "rendered": false
+        },
+        "jefe-calidad": {
+            "nombre": "Jefe de Calidad",
+            "empleado": "",
+            "color": "red",
+            "hijos": ["calidad-obra"],
+            "expanded": false,
+            "rendered": false
+        },
+        "calidad-obra": {
+            "nombre": "Control de Calidad en Obra",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "jefe-medioambiente": {
+            "nombre": "Jefe de Medio Ambiente",
+            "empleado": "",
+            "color": "red",
+            "hijos": ["medioambiente-obra"],
+            "expanded": false,
+            "rendered": false
+        },
+        "medioambiente-obra": {
+            "nombre": "Medio Ambiente en Obra",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        },
+        "jefe-prevencion": {
+            "nombre": "Jefe de Prevención de Riesgos",
+            "empleado": "",
+            "color": "blue",
+            "hijos": ["prevencion-obra"],
+            "expanded": false,
+            "rendered": false
+        },
+        "prevencion-obra": {
+            "nombre": "Prevención de Riesgos en Obra",
+            "empleado": "",
+            "color": "blue",
+            "hijos": [],
+            "expanded": false,
+            "rendered": false
+        }
+    },
+    "root": "gerente-general"
+}
