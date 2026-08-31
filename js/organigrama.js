@@ -45,6 +45,16 @@ function inicializarOrganigrama() {
 
     contenedor.innerHTML = "";
 
+    // Crear SVG
+    const svg = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg"
+    );
+
+    svg.setAttribute("id", "organigrama-lines");
+
+    contenedor.appendChild(svg);
+
     // Nodo raíz
     const raiz = crearNodo("gerente-general");
 
@@ -253,72 +263,91 @@ document.getElementById("toggle-all").addEventListener("click", toggleTodos);
 // ============================================
 
 function dibujarConexiones() {
-    
-    const svg = document.getElementById("organigrama-lines");
-    
+
+    const svg =
+        document.getElementById("organigrama-lines");
+
+
     if (!svg) {
+        console.error("No existe el SVG del organigrama");
         return;
     }
-    
+
+
+    // Limpiar conexiones anteriores
     svg.innerHTML = "";
 
+
+    // Crear flecha
     crearArrowMarker(svg);
 
-    const organigrama = document.getElementById("organigrama");
+
+    const organigrama =
+    document.getElementById("organigrama");
 
     const organigramaRect =
-        organigrama.getBoundingClientRect();
+    organigrama.getBoundingClientRect();
+
+    svg.setAttribute(
+        "width",
+        organigrama.scrollWidth
+    );
+
+    svg.setAttribute(
+        "height",
+        organigrama.scrollHeight
+    );
 
 
-    /*
-     * Recorremos todos los nodos existentes.
-     */
+    // Todos los nodos
     const nodos =
-        document.querySelectorAll(".org-node-container");
+        document.querySelectorAll(
+            ".org-node-container"
+        );
 
 
     nodos.forEach(nodoContainer => {
 
-        const id = nodoContainer.dataset.id;
+        const id =
+            nodoContainer.dataset.id;
+
 
         const nodo =
             organigramaData.nodos[id];
+
 
         if (!nodo || !nodo.hijos) {
             return;
         }
 
 
-        /*
-         * Si el contenedor de hijos está oculto,
-         * no dibujamos sus conexiones.
-         */
+        // Contenedor de hijos directo
         const hijosContainer =
-            nodoContainer.querySelector(":scope > .org-children");
+            nodoContainer.querySelector(
+                ":scope > .org-children"
+            );
 
 
-        if (!hijosContainer ||
-            !hijosContainer.classList.contains("show")) {
-
+        if (
+            !hijosContainer ||
+            !hijosContainer.classList.contains("show")
+        ) {
             return;
         }
 
 
-        /*
-         * Posición del nodo padre.
-         */
+        // Nodo padre
         const nodoElement =
-            nodoContainer.querySelector(":scope > .org-node");
+            nodoContainer.querySelector(
+                ":scope > .org-node"
+            );
 
 
         const padreRect =
             nodoElement.getBoundingClientRect();
 
 
-        /*
-         * Punto de salida:
-         * centro inferior del padre.
-         */
+        // Punto inferior del padre
         const x1 =
             padreRect.left +
             padreRect.width / 2 -
@@ -330,46 +359,51 @@ function dibujarConexiones() {
             organigramaRect.top;
 
 
-        /*
-         * Buscar los hijos.
-         */
+        // Hijos
         const hijos =
             hijosContainer.children;
 
 
-        Array.from(hijos).forEach(hijoContainer => {
+        Array.from(hijos).forEach(
+            hijoContainer => {
 
-            const hijoElement =
-                hijoContainer.querySelector(":scope > .org-node");
+                const hijoElement =
+                    hijoContainer.querySelector(
+                        ":scope > .org-node"
+                    );
 
 
-            if (!hijoElement) {
-                return;
+                if (!hijoElement) {
+                    return;
+                }
+
+
+                const hijoRect =
+                    hijoElement.getBoundingClientRect();
+
+
+                // Punto superior del hijo
+                const x2 =
+                    hijoRect.left +
+                    hijoRect.width / 2 -
+                    organigramaRect.left;
+
+
+                const y2 =
+                    hijoRect.top -
+                    organigramaRect.top;
+
+
+                crearConexion(
+                    svg,
+                    x1,
+                    y1,
+                    x2,
+                    y2
+                );
+
             }
-
-
-            const hijoRect =
-                hijoElement.getBoundingClientRect();
-
-
-            /*
-             * Punto de llegada:
-             * centro superior del hijo.
-             */
-            const x2 =
-                hijoRect.left +
-                hijoRect.width / 2 -
-                organigramaRect.left;
-
-
-            const y2 =
-                hijoRect.top -
-                organigramaRect.top;
-
-
-            crearConexion(svg, x1, y1, x2, y2);
-
-        });
+        );
 
     });
 }
@@ -378,12 +412,24 @@ function dibujarConexiones() {
 // Función de dibujado de líneas
 // ============================================
 
-function crearConexion(svg, x1, y1, x2, y2) {
+function crearConexion(
+    svg,
+    x1,
+    y1,
+    x2,
+    y2
+) {
 
     const path =
-        document.createElementNS("http://www.w3.org/2000/svg", "path");
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "path"
+        );
 
-    const mitadY = y1 + (y2 - y1) / 2;
+
+    // Punto medio vertical
+    const mitadY =
+        y1 + (y2 - y1) / 2;
 
 
     const d = `
@@ -393,13 +439,14 @@ function crearConexion(svg, x1, y1, x2, y2) {
         L ${x2} ${y2}
     `;
 
+
     path.setAttribute("d", d);
 
-    path.classList.add("org-connection");
+    path.classList.add(
+        "org-connection"
+    );
 
-    /*
-     * Flecha al final de la línea.
-     */
+
     path.setAttribute(
         "marker-end",
         "url(#arrow)"
@@ -429,19 +476,40 @@ function crearArrowMarker(svg) {
         );
 
 
-    marker.setAttribute("id", "arrow");
+    marker.setAttribute(
+        "id",
+        "arrow"
+    );
 
-    marker.setAttribute("viewBox", "0 0 10 10");
+    marker.setAttribute(
+        "viewBox",
+        "0 0 10 10"
+    );
 
-    marker.setAttribute("refX", "9");
+    marker.setAttribute(
+        "refX",
+        "9"
+    );
 
-    marker.setAttribute("refY", "5");
+    marker.setAttribute(
+        "refY",
+        "5"
+    );
 
-    marker.setAttribute("markerWidth", "6");
+    marker.setAttribute(
+        "markerWidth",
+        "6"
+    );
 
-    marker.setAttribute("markerHeight", "6");
+    marker.setAttribute(
+        "markerHeight",
+        "6"
+    );
 
-    marker.setAttribute("orient", "auto-start-reverse");
+    marker.setAttribute(
+        "orient",
+        "auto"
+    );
 
 
     const path =
