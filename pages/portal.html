@@ -33,8 +33,17 @@
                 <button id="toggle-all" class="btn btn-primary">Mostrar todo</button>
             </div>
             <div id="organigrama-panel">
-                <div id="organigrama">
-                    <svg id="organigrama-lines"></svg>
+                <div id="organigrama-controls">
+                    <button id="zoom-out" class="btn btn-sm btn-secondary"> − </button>
+                    <button id="zoom-reset" class="btn btn-sm btn-secondary"> 100% </button>
+                    <button id="zoom-in" class="btn btn-sm btn-secondary"> + </button>
+                </div>
+                <div id="organigrama-viewport">
+                    <div id="organigrama-wrapper">
+                        <div id="organigrama">
+                            <svg id="organigrama-lines"></svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,6 +3,14 @@ const ORGANIGRAMA_JSON = "../js/organigrama.json";
 let organigramaData = null;
 let todoExpandido = false;
 
+// Variables para el zoom
+
+let zoomActual = 1;
+
+const ZOOM_MIN = 0.5;
+const ZOOM_MAX = 2;
+const ZOOM_STEP = 0.1;
+
 
 // ============================================
 // Cargar JSON
@@ -225,9 +233,13 @@ function toggleTodos() {
     hijosContainers.forEach(container => {
 
         if (todoExpandido) {
+
             container.classList.add("show");
+
         } else {
+
             container.classList.remove("show");
+
         }
 
     });
@@ -245,9 +257,105 @@ function toggleTodos() {
         document.getElementById("toggle-all");
 
 
-    botonGlobal.textContent = todoExpandido ? "Ocultar todo" : "Mostrar todo";
+    botonGlobal.textContent =
+        todoExpandido
+            ? "Ocultar todo"
+            : "Mostrar todo";
 
-    setTimeout(() => {dibujarConexiones();}, 0);
+
+    /*
+     * Esperar a que el DOM actualice las posiciones
+     * antes de recalcular las líneas.
+     */
+    requestAnimationFrame(() => {
+
+        dibujarConexiones();
+
+
+        /*
+         * Si acabamos de replegar todo,
+         * centrar nuevamente el nodo raíz.
+         */
+        if (!todoExpandido) {
+
+            requestAnimationFrame(() => {
+
+                centrarNodoRaiz();
+
+            });
+
+        }
+
+    });
+
+}
+
+function centrarNodoRaiz() {
+
+    const viewport =
+        document.getElementById("organigrama-viewport");
+
+    const raiz =
+        document.querySelector(
+            '.org-node-container[data-id="gerente-general"]'
+        );
+
+
+    if (!viewport || !raiz) {
+        return;
+    }
+
+
+    const nodoRaiz =
+        raiz.querySelector(":scope > .org-node");
+
+
+    if (!nodoRaiz) {
+        return;
+    }
+
+
+    const viewportRect =
+        viewport.getBoundingClientRect();
+
+    const raizRect =
+        nodoRaiz.getBoundingClientRect();
+
+
+    /*
+     * Diferencia entre el centro del viewport
+     * y el centro del nodo raíz.
+     */
+    const desplazamientoX =
+        (
+            raizRect.left +
+            raizRect.width / 2
+        ) -
+        (
+            viewportRect.left +
+            viewportRect.width / 2
+        );
+
+
+    const desplazamientoY =
+        (
+            raizRect.top +
+            raizRect.height / 2
+        ) -
+        (
+            viewportRect.top +
+            viewportRect.height / 2
+        );
+
+
+    /*
+     * Ajustar el scroll teniendo en cuenta el zoom.
+     */
+    viewport.scrollLeft +=
+        desplazamientoX;
+
+    viewport.scrollTop +=
+        desplazamientoY;
 
 }
 
@@ -264,38 +372,56 @@ document.getElementById("toggle-all").addEventListener("click", toggleTodos);
 
 function dibujarConexiones() {
 
-    const svg =
-        document.getElementById("organigrama-lines");
-
+    const svg = document.getElementById("organigrama-lines");
 
     if (!svg) {
         console.error("No existe el SVG del organigrama");
         return;
     }
 
+    const organigrama = document.getElementById("organigrama");
+
+    if (!organigrama) {
+        return;
+    }
 
     // Limpiar conexiones anteriores
     svg.innerHTML = "";
 
-
     // Crear flecha
     crearArrowMarker(svg);
 
-
-    const organigrama =
-    document.getElementById("organigrama");
-
+    /*
+     * Rectángulo visual del organigrama.
+     *
+     * getBoundingClientRect() considera el zoom aplicado
+     * mediante transform: scale().
+     */
     const organigramaRect =
-    organigrama.getBoundingClientRect();
+        organigrama.getBoundingClientRect();
 
+    /*
+     * Factor de escala actual.
+     *
+     * El ancho visual es distinto al ancho real debido
+     * al transform: scale().
+     */
+    const escalaX =
+        organigramaRect.width / organigrama.offsetWidth;
+
+    const escalaY =
+        organigramaRect.height / organigrama.offsetHeight;
+
+
+    // Tamaño del SVG en coordenadas NATURALES
     svg.setAttribute(
         "width",
-        organigrama.scrollWidth
+        organigrama.offsetWidth
     );
 
     svg.setAttribute(
         "height",
-        organigrama.scrollHeight
+        organigrama.offsetHeight
     );
 
 
@@ -310,7 +436,6 @@ function dibujarConexiones() {
 
         const id =
             nodoContainer.dataset.id;
-
 
         const nodo =
             organigramaData.nodos[id];
@@ -328,6 +453,7 @@ function dibujarConexiones() {
             );
 
 
+        // No dibujar conexiones de ramas cerradas
         if (
             !hijosContainer ||
             !hijosContainer.classList.contains("show")
@@ -343,20 +469,34 @@ function dibujarConexiones() {
             );
 
 
+        if (!nodoElement) {
+            return;
+        }
+
+
         const padreRect =
             nodoElement.getBoundingClientRect();
 
 
-        // Punto inferior del padre
+        /*
+         * Convertimos las coordenadas visuales
+         * nuevamente a coordenadas naturales.
+         */
         const x1 =
-            padreRect.left +
-            padreRect.width / 2 -
-            organigramaRect.left;
+            (
+                (padreRect.left - organigramaRect.left)
+                / escalaX
+            ) +
+            (
+                padreRect.width / escalaX / 2
+            );
 
 
         const y1 =
-            padreRect.bottom -
-            organigramaRect.top;
+            (
+                padreRect.bottom -
+                organigramaRect.top
+            ) / escalaY;
 
 
         // Hijos
@@ -382,16 +522,21 @@ function dibujarConexiones() {
                     hijoElement.getBoundingClientRect();
 
 
-                // Punto superior del hijo
                 const x2 =
-                    hijoRect.left +
-                    hijoRect.width / 2 -
-                    organigramaRect.left;
+                    (
+                        (hijoRect.left - organigramaRect.left)
+                        / escalaX
+                    ) +
+                    (
+                        hijoRect.width / escalaX / 2
+                    );
 
 
                 const y2 =
-                    hijoRect.top -
-                    organigramaRect.top;
+                    (
+                        hijoRect.top -
+                        organigramaRect.top
+                    ) / escalaY;
 
 
                 crearConexion(
@@ -537,6 +682,109 @@ function crearArrowMarker(svg) {
 
     svg.appendChild(defs);
 }
+
+function aplicarZoom() {
+
+    const organigrama =
+        document.getElementById("organigrama");
+
+    const wrapper =
+        document.getElementById("organigrama-wrapper");
+
+
+    if (!organigrama || !wrapper) {
+        return;
+    }
+
+
+    // Aplicar zoom
+    organigrama.style.transform =
+        `scale(${zoomActual})`;
+
+
+    /*
+     * Obtener el tamaño natural del organigrama.
+     */
+    const ancho =
+        organigrama.offsetWidth;
+
+    const alto =
+        organigrama.offsetHeight;
+
+
+    /*
+     * Ajustar el espacio ocupado por el wrapper.
+     *
+     * Esto permite que el viewport pueda hacer
+     * scroll correctamente después del zoom.
+     */
+    wrapper.style.width =
+        `${ancho * zoomActual}px`;
+
+    wrapper.style.height =
+        `${alto * zoomActual}px`;
+
+
+    /*
+     * Actualizar porcentaje mostrado.
+     */
+    document.getElementById(
+        "zoom-reset"
+    ).textContent =
+        `${Math.round(zoomActual * 100)}%`;
+
+
+    /*
+     * Esperar a que el navegador termine de aplicar
+     * el transform antes de recalcular las líneas.
+     */
+    requestAnimationFrame(() => {
+
+        dibujarConexiones();
+
+    });
+
+}
+
+// ============================================
+// Controles de zoom
+// ============================================
+
+document.getElementById("zoom-in").addEventListener("click", () => {
+
+    if (zoomActual < ZOOM_MAX) {
+        zoomActual += ZOOM_STEP;
+
+        // Evitar problemas de precisión decimal
+        zoomActual = Math.round(zoomActual * 10) / 10;
+
+        aplicarZoom();
+    }
+
+});
+
+
+document.getElementById("zoom-out").addEventListener("click", () => {
+
+    if (zoomActual > ZOOM_MIN) {
+        zoomActual -= ZOOM_STEP;
+
+        // Evitar problemas de precisión decimal
+        zoomActual = Math.round(zoomActual * 10) / 10;
+
+        aplicarZoom();
+    }
+
+});
+
+
+document.getElementById("zoom-reset").addEventListener("click", () => {
+
+    zoomActual = 1;
+
+    aplicarZoom();
+
+});
 
 // ============================================
 // Iniciar
